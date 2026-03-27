@@ -30,38 +30,52 @@ No Slack API. No login. No data leaving your machine.
 
 ## Demo
 
-**Input — a real Slack thread:**
+Save this thread to a file and run one command:
 
-```
-Alice: Should we use Postgres or MySQL for the new service?
-Bob:   I've used both. Postgres has better JSON support and
-       we'll need that for metadata.
-Alice: That's a good point. Anyone disagree?
-Charlie: No objections. Let's go with Postgres.
-Alice: Agreed. @Charlie can you update the infra docs?
-Charlie: On it. Will be done by Friday.
-Alice: Also — should we add connection pooling from day one?
-Bob:   Yes, PgBouncer. We'll regret it if we don't.
-Alice: Done. @Bob owns the config.
+```bash
+python settled.py --file thread.txt
 ```
 
-**Output — what Settled gives you:**
+**thread.txt** — a real Slack thread:
 
 ```
-Thread summary: Agreed to use Postgres with PgBouncer for the new service.
-
-Decision 1: Use Postgres instead of MySQL
-  Owner:      Charlie
-  Rationale:  Better JSON support needed for metadata storage
-  Confidence: high ✅
-  Actions:    Update infrastructure docs by Friday
-
-Decision 2: Add PgBouncer connection pooling from day one
-  Owner:      Bob
-  Confidence: high ✅
+Sarah:   ok we need to pick a deploy target before EOD — Railway or stay on Render?
+James:   render has been fine but we keep hitting the 512mb limit
+Marcus:  same, it crashed twice this sprint already
+Sarah:   Railway gives us more headroom and the pricing is similar once we upgrade
+James:   yeah i'm fine with Railway
+Marcus:  same
+Sarah:   ok Railway it is. @James can you migrate staging this week?
+James:   yep, done by Thursday
+Sarah:   great. prod migration follows after staging looks stable for a few days
+Marcus:  should we document this somewhere?
+Sarah:   yeah @Marcus add it to the decisions log in Notion
+Marcus:  on it
 ```
 
-That took 40 seconds and would have taken 4 days to find again.
+**Output:**
+
+```
+# Decision Record
+
+Thread summary: The team agreed to migrate from Render to Railway.
+
+## Decision 1
+**Migrate from Render to Railway as the deploy target**
+
+- Owner:     James
+- Rationale: Render's 512MB memory limit has caused two crashes this sprint;
+             Railway provides more headroom at similar cost
+- Confidence: 🟢 high
+- Action items:
+  - James: migrate staging environment by Thursday
+  - Prod migration follows after staging is confirmed stable
+  - Marcus: document decision in the Notion decisions log
+```
+
+12 messages. 3 people. 2 action items with owners. Done in under 5 seconds.
+
+Prefer the web UI? `python settled.py --web` — paste and press Cmd+Enter.
 
 ---
 
