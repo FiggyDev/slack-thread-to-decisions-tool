@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-decide.py — Slack Thread → Decision Extractor
-Paste a Slack thread, get back a clean decision record.
+Settled — Stop losing decisions in Slack threads.
+Paste a thread. Get back a clean decision record.
 
 Usage:
-  CLI:   python decide.py "paste your thread here"
-         cat thread.txt | python decide.py
-  Web:   python decide.py --web           (opens http://localhost:5100)
-  File:  python decide.py --file thread.txt
+  CLI:   python settled.py "paste your thread here"
+         cat thread.txt | python settled.py
+  Web:   python settled.py --web           (opens http://localhost:5100)
+  File:  python settled.py --file thread.txt
 
 LLM backends (in priority order):
   1. Ollama local  (default, free, private)
@@ -230,7 +230,7 @@ _HTML = r"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Slack → Decisions</title>
+<title>Settled — Slack Thread Decisions</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
@@ -281,7 +281,7 @@ _HTML = r"""<!DOCTYPE html>
 </head>
 <body>
 <div class="wrap">
-  <h1>🧵 Slack → Decisions</h1>
+  <h1>✅ Settled</h1>
   <div class="sub">Paste a Slack thread. Get back a clean decision record.</div>
 
   <label for="thread">Slack thread</label>
@@ -444,11 +444,11 @@ def cli_main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=textwrap.dedent("""
         Examples:
-          python decide.py "Alice: Let's go with Postgres. Bob: Agreed."
-          cat thread.txt | python decide.py
-          python decide.py --file thread.txt
-          python decide.py --file thread.txt --json
-          python decide.py --web
+          python settled.py "Alice: Let's go with Postgres. Bob: Agreed."
+          cat thread.txt | python settled.py
+          python settled.py --file thread.txt
+          python settled.py --file thread.txt --json
+          python settled.py --web
         """),
     )
     parser.add_argument("thread", nargs="?", help="Thread text (or use --file / stdin)")
@@ -460,15 +460,13 @@ def cli_main():
     args = parser.parse_args()
 
     if args.model:
-        import decide as _self
-        _self.OLLAMA_MODEL = args.model
         globals()["OLLAMA_MODEL"] = args.model
 
     # Web mode
     if args.web:
         server = HTTPServer(("0.0.0.0", args.port), _Handler)
         url = f"http://localhost:{args.port}"
-        print(f"🧵 Slack → Decisions  |  {url}")
+        print(f"✅ Settled  |  {url}")
         print("   Paste a thread in the browser. Cmd+Enter to extract.")
         print("   Press Ctrl+C to stop.\n")
         try:
