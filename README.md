@@ -1,3 +1,5 @@
+*Part of [Figgy Labs](https://github.com/FiggyDev/figgy-labs)*
+
 # ✅ Settled
 
 **Your team makes decisions in Slack. Settled captures them.**
